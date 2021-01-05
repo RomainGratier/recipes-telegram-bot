@@ -128,8 +128,8 @@ def d2v_embeddings(data):
     data = data['ingredients_query'].tolist()
     tagged_data = [TaggedDocument(words=row.split(), tags=[str(index)]) for index, row in enumerate(data)]
 
-    max_epochs = 10
-    vec_size = 50
+    max_epochs = 25
+    vec_size = 20
     alpha = 0.025
 
     model_embedding = Doc2Vec(size=vec_size,
