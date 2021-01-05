@@ -123,7 +123,6 @@ def create_model_cuisine_predictions():
     
     ## Save model and vectorizer to disk
     save_pkl(model, os.path.join(MODEL_PATH, "pickle_model.pkl"))
-    save_pkl(vectorizer, model, os.path.join(MODEL_PATH, "pickle_vectorizer.pkl"))
 
 def d2v_embeddings(data):
     data = data['ingredients_query'].tolist()
