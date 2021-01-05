@@ -27,4 +27,4 @@ def create_and_populate_db():
     print(data.columns)
     print(data.head())
     print(data.shape)
-    #data.to_sql('main_recipes', db, if_exists='replace')
+    data.to_sql('main_recipes', db, if_exists='replace')
