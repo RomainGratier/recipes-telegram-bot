@@ -35,7 +35,9 @@ from src.recognition_engine.inference import classify_image
 
 # Enable logging
 logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
+    #filename= 'telgramBot.log',
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO
 )
 
 logger = logging.getLogger(__name__)
@@ -52,6 +54,11 @@ reply_keyboard = [
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
 def start(update: Update, context: CallbackContext) -> int:
+    user = update.message.from_user
+    logger.info(f"{user.first_name}: Start")
+
+    context.user_data['chat_id'] = update.message.chat_id
+
     update.message.reply_text(
         "Hi! I am you recipe bot. What ingredients do you currently have?"
         "You can send an image or add ingredients by typing it in one or two words",
@@ -63,7 +70,7 @@ def received_image_information(update: Update, context: CallbackContext) -> int:
     user = update.message.from_user
     photo_file = update.message.photo[-1].get_file()
     photo_file.download('infer_image.png')
-    logger.info("Photo of %s: %s", user.first_name, 'user_photo.jpg')
+    logger.info("Photo of %s: %s", user.first_name, 'infer_image.jpg')
     update.message.reply_text(
         'Thanks the photo is being processed'
     )
@@ -90,7 +97,8 @@ def received_image_information(update: Update, context: CallbackContext) -> int:
     return CALLBACK1
 
 def button1(update: Update, context: CallbackContext) -> int:
-    
+    logger.info(f": button1")
+
     query = update.callback_query
     query.answer()
 
@@ -106,14 +114,16 @@ def button1(update: Update, context: CallbackContext) -> int:
 
 def recipes_query(update: Update, context: CallbackContext) -> int:
     """ Get recipes """
+    user = update.message.from_user
+    logger.info(f"{user.first_name}: recipes_query")
 
     user_data = context.user_data
-    
+
     input_text = ' '.join(user_data['ingredients_list'])
-    
+
     # Predict cuisine
     cuisine = predict_cuisine(input_text)
-    
+
     keyboard = [
         [
             InlineKeyboardButton(cuisine[0], callback_data=cuisine[0]),
@@ -127,22 +137,22 @@ def recipes_query(update: Update, context: CallbackContext) -> int:
     reply_markup = InlineKeyboardMarkup(keyboard)
     # Send message with text and appended InlineKeyboard
     update.message.reply_text("Chose the type of cuisine you want!", reply_markup=reply_markup)
-    
+
     return CALLBACK2
 
 def button2(update: Update, context: CallbackContext) -> int:
-    
+    #user = update.message.from_user
+    logger.info(f"button2")
+
     query = update.callback_query
     query.answer()
-        
+
     # Get recipes
     recipes = get_similar_recipes(context.user_data['ingredients_list'], query.data)
-    
-    sep_main = ' --------------------------------------- '
+
     sep = '\n\n'
-    txt = ''
     for index, row in recipes.iterrows():
-    
+
         title = 'Title: ' + row['title'] 
         ingredients=''
         list_ing = row['ingredients'].replace('ADVERTISEMENT', '').strip('][').split(', ')
@@ -150,24 +160,17 @@ def button2(update: Update, context: CallbackContext) -> int:
             ingredients+= ingredient.replace("'", "") + '\n'
         ingredients = 'Ingredients: ' + '\n' + ingredients
         instructions = 'Instruction: '+ '\n' + row['instructions']
-        
-        txt += title + sep + ingredients + sep + instructions + '\n' + sep_main
 
-    query.edit_message_text(txt)
+        txt = title + sep + ingredients + sep + instructions
 
-    return CHOOSING
-
-    user_data = context.user_data    
-    if 'ingredients_list' not in user_data:
-        user_data['ingredients_list'] = [query.data]
-    else:
-        user_data['ingredients_list'].append(query.data)
-
-    query.edit_message_text(text=f"Ok you selected: {query.data}")
+        context.bot.send_message(chat_id=context.user_data['chat_id'], text=txt)
 
     return CHOOSING
 
 def show_basket(update: Update, context: CallbackContext) -> int:
+    user = update.message.from_user
+    logger.info(f"{user.first_name}: show_basket")
+
     user_data = context.user_data
     update.message.reply_text(
         "Neat! Just so you know, this is what you already gived me:"
@@ -177,6 +180,9 @@ def show_basket(update: Update, context: CallbackContext) -> int:
     return CHOOSING
 
 def received_text_information(update: Update, context: CallbackContext) -> int:
+    user = update.message.from_user
+    logger.info(f"{user.first_name}: received_text_information")
+
     user_data = context.user_data
     text = update.message.text
     
@@ -193,6 +199,9 @@ def received_text_information(update: Update, context: CallbackContext) -> int:
     return CHOOSING
 
 def remove_item(update: Update, context: CallbackContext) -> int:
+    user = update.message.from_user
+    logger.info(f"{user.first_name}: remove_item")
+
     user_data = context.user_data
     if 'ingredients_list' in user_data:
         del user_data['ingredients_list'][-1]
@@ -200,6 +209,9 @@ def remove_item(update: Update, context: CallbackContext) -> int:
     return CHOOSING
 
 def done(update: Update, context: CallbackContext) -> int:
+    user = update.message.from_user
+    logger.info(f"{user.first_name}: done")
+
     user_data = context.user_data
     if 'ingredients_list' in user_data:
         del user_data['ingredients_list']
@@ -237,6 +249,7 @@ def main() -> None:
                 CallbackQueryHandler(button2)],
         },
         fallbacks=[MessageHandler(Filters.regex('^Done$'), done)],
+        per_message=False,
     )
 
     dispatcher.add_handler(conv_handler)

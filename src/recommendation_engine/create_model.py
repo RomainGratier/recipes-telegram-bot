@@ -12,7 +12,6 @@ from sklearn.linear_model import LogisticRegressionCV
 from sklearn import metrics
 from sklearn import utils
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
-import multiprocessing
 import pickle
 ## DB accesses
 import sqlite3 as sq
@@ -128,8 +127,8 @@ def d2v_embeddings(data):
     data = data['ingredients_query'].tolist()
     tagged_data = [TaggedDocument(words=row.split(), tags=[str(index)]) for index, row in enumerate(data)]
 
-    max_epochs = 25
-    vec_size = 20
+    max_epochs = 20
+    vec_size = 50
     alpha = 0.025
 
     model_embedding = Doc2Vec(size=vec_size,

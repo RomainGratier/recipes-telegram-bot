@@ -27,7 +27,6 @@ def set_input_tensor(interpreter, image):
 
 def classify_image(filename, top_k=5):
 
-    print("Model Loaded Successfully.")
     np_image = Image.open(filename)
     np_image = np.array(np_image).astype('float32')/255
     np_image = transform.resize(np_image, (256, 256, 3))
@@ -42,5 +41,4 @@ def classify_image(filename, top_k=5):
     # Get cuisine
     cusine_ordered = [Classes[ind] for ind in indexes]
 
-    print(cusine_ordered)
     return cusine_ordered[:top_k]
