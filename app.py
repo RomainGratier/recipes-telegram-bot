@@ -14,7 +14,8 @@ Send /start to initiate the conversation.
 Press Ctrl-C on the command line or send a signal to the process to stop the
 bot.
 """
-
+# Import libraries
+import argparse
 import logging
 from typing import Dict
 
@@ -32,6 +33,13 @@ from telegram.ext import (
 from src.bot.credentials import bot_token
 from src.recommendation_engine.inference import predict_cuisine, get_similar_recipes
 from src.recognition_engine.inference import classify_image
+
+# Create the parser
+my_parser = argparse.ArgumentParser(description='Give your personal token')
+
+# Add the arguments
+my_parser.add_argument('token', metavar='token', type=str, help='The token given by Fatherbot')
+
 
 # Enable logging
 logging.basicConfig(
@@ -223,7 +231,7 @@ def done(update: Update, context: CallbackContext) -> int:
     user_data.clear()
     return ConversationHandler.END    
 
-def main() -> None:
+def main(bot_token) -> None:
     # Create the Updater and pass it your bot's token.
     # Make sure to set use_context=True to use the new context based callbacks
     # Post version 12 this will no longer be necessary
@@ -263,4 +271,6 @@ def main() -> None:
     updater.idle()
 
 if __name__ == '__main__':
-    main()
+    # Execute the parse_args() method
+    args = my_parser.parse_args()
+    main(args.token)
