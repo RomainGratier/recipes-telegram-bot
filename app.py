@@ -30,7 +30,6 @@ from telegram.ext import (
     CallbackQueryHandler,
 )
 
-from src.bot.credentials import bot_token
 from src.recommendation_engine.inference import predict_cuisine, get_similar_recipes
 from src.recognition_engine.inference import classify_image
 
