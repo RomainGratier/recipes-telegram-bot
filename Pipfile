@@ -5,7 +5,6 @@ name = "pypi"
 
 [packages]
 pandas = "*"
-keras = "*"
 pillow = "*"
 numpy = "*"
 scikit-image = "*"
@@ -14,6 +13,7 @@ scikit-learn = "*"
 gensim = "*"
 python-telegram-bot = "*"
 tensorflow = {file = "https://github.com/bitsy-ai/tensorflow-arm-bin/releases/download/v2.4.0/tensorflow-2.4.0-cp37-none-linux_armv7l.whl"}
+keras = "*"
 
 [dev-packages]
 
