@@ -15,6 +15,7 @@ additional_stop_words = ["advertisement", "advertisements",
                          "pound", "pounds",
                          ]
 
+nltk.download('wordnet')
 nltk.download("stopwords")
 
 def utils_preprocess_text(text, flg_stemm=False, flg_lemm=True, lst_stopwords=None):
