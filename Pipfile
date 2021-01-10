@@ -4,16 +4,16 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pandas = "*"
-pillow = "*"
-numpy = "*"
-scikit-image = "*"
-nltk = "*"
-scikit-learn = "*"
-gensim = "*"
-python-telegram-bot = "*"
+pandas = "1.2.0"
+pillow = "8.1.0"
+numpy = "1.19.5"
+scikit-image = "0.18.1"
+nltk = "3.5"
+scikit-learn = "0.24.0"
+gensim = "3.8.3"
+python-telegram-bot = "13.1"
 tensorflow = {file = "https://github.com/bitsy-ai/tensorflow-arm-bin/releases/download/v2.4.0/tensorflow-2.4.0-cp37-none-linux_armv7l.whl"}
-keras = "*"
+keras = "2.4.3"
 
 [dev-packages]
 
