@@ -5,18 +5,6 @@ from sklearn import feature_extraction, model_selection, pipeline, manifold, pre
 
 from src.recommendation_engine.data import import_data
 
-'''
-Preprocess a string.
-:parameter
-    :param text: string - name of column containing text
-    :param lst_stopwords: list - list of stopwords to remove
-    :param flg_stemm: bool - whether stemming is to be applied
-    :param flg_lemm: bool - whether lemmitisation is to be applied
-:return
-    cleaned text
-'''
- 
-
 additional_stop_words = ["advertisement", "advertisements",
                          "cup", "cups",
                          "tablespoon", "tablespoons", 
@@ -26,6 +14,8 @@ additional_stop_words = ["advertisement", "advertisements",
                          "pepper", 
                          "pound", "pounds",
                          ]
+
+nltk.download("stopwords")
 
 def utils_preprocess_text(text, flg_stemm=False, flg_lemm=True, lst_stopwords=None):
     ## clean (convert to lowercase and remove punctuations and characters and then strip)
