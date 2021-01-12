@@ -8,7 +8,7 @@ This project creates a telegram bot that can recommend recipes based on the ingr
 
 ## Presentation of the bot
 
-I have written a Medium post about the details of this bot! if you are interested I encourage you the read the following [post!](https://romain-gratier.medium.com/create-a-simple-bot-with-telegram-that-notifies-you-about-the-progress-of-your-code-69bab685b9db) on  [<img src="https://github.com/RomainGratier/telegram-coffee-break/blob/main/documents/medium.png" width="100"/>](https://romain-gratier.medium.com/create-a-simple-bot-with-telegram-that-notifies-you-about-the-progress-of-your-code-69bab685b9db)
+I have written a Medium post about the details of this bot! if you are interested I encourage you the read the following [post!](https://romain-gratier.medium.com/de2d314f565d?source=friends_link&sk=c5280f8c50aa5551d1b36619891e9b4f) on  [<img src="https://github.com/RomainGratier/telegram-coffee-break/blob/main/documents/medium.png" width="100"/>](https://romain-gratier.medium.com/de2d314f565d?source=friends_link&sk=c5280f8c50aa5551d1b36619891e9b4f)
 
 ## Installation & setup
 
