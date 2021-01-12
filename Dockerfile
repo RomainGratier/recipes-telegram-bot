@@ -1,8 +1,6 @@
-FROM arm32v7/python:3.7
+FROM python:3.7
 
 ENV token token_init
-
-RUN apt install libatlas-base-dev
 
 COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt 
