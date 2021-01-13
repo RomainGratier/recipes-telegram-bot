@@ -50,12 +50,12 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
+# Main interactions
 CHOOSING, GET_TEXT, GET_IMAGE = range(3)
 # Callback data
 CALLBACK1, CALLBACK2 = range(3,5)
 
 reply_keyboard = [
-    #['Add ingredient by photo', 'Add ingredient by text'],
     ['Show ingredients', 'Get recipes'],
     ['Remove item', 'Done'],
 ]
@@ -73,6 +73,12 @@ def start(update: Update, context: CallbackContext) -> int:
         reply_markup=markup,
     )
     return CHOOSING
+
+def get_basket_txt(list_ingredients):
+    txt = 'Here are your current ingredients:\n'
+    for ingredient in list_ingredients:
+        txt += f'   - {ingredient}\n'
+    return txt
 
 def received_image_information(update: Update, context: CallbackContext) -> int:
     user = update.message.from_user
@@ -117,6 +123,9 @@ def button1(update: Update, context: CallbackContext) -> int:
         user_data['ingredients_list'].append(query.data)
 
     query.edit_message_text(text=f"Ok you selected: {query.data}")
+    
+    txt = get_basket_txt(user_data['ingredients_list'])
+    context.bot.send_message(chat_id=context.user_data['chat_id'], text=txt)
 
     return CHOOSING
 
@@ -180,9 +189,11 @@ def show_basket(update: Update, context: CallbackContext) -> int:
     logger.info(f"{user.first_name}: show_basket")
 
     user_data = context.user_data
+    
+    txt = get_basket_txt(user_data['ingredients_list'])
+    
     update.message.reply_text(
-        "Neat! Just so you know, this is what you already gived me:"
-        f"{user_data['ingredients_list']}",
+        txt,
         reply_markup=markup,
     )
     return CHOOSING
@@ -199,9 +210,9 @@ def received_text_information(update: Update, context: CallbackContext) -> int:
     else:
         user_data['ingredients_list'].append(text)
 
+    txt = get_basket_txt(user_data['ingredients_list'])
     update.message.reply_text(
-        "Neat! Just so you know, this is what you already gived me:"
-        f"{user_data['ingredients_list']}",
+        txt,
         reply_markup=markup,
     )
     return CHOOSING
@@ -213,7 +224,13 @@ def remove_item(update: Update, context: CallbackContext) -> int:
     user_data = context.user_data
     if 'ingredients_list' in user_data:
         del user_data['ingredients_list'][-1]
-
+    
+    introduction = 'You have deleted the last ingredient. '
+    txt = get_basket_txt(user_data['ingredients_list'])
+    update.message.reply_text(
+        introduction + txt,
+        reply_markup=markup,
+    )
     return CHOOSING
 
 def done(update: Update, context: CallbackContext) -> int:
